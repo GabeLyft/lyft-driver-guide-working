@@ -2,9 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a1a2e">
 <title>Lyft Driver App – New Driver Teaching Tool</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2972/2972185.png">
 <style>
 :root {
   --lyft-purple: #5B3DE8;
@@ -22,17 +27,26 @@
 body{
   background:#1a1a2e;
   display:flex;flex-direction:column;align-items:center;
-  min-height:100vh;padding:20px 12px 40px;
+  min-height:100vh;min-height:100dvh;
+  padding:max(20px, env(safe-area-inset-top)) 12px max(40px, env(safe-area-inset-bottom));
   font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;
+  -webkit-text-size-adjust:100%;
+  touch-action:manipulation;
+  overscroll-behavior:none;
 }
 .page-title{color:#fff;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;opacity:.5;margin-bottom:16px;text-align:center;}
 
-/* ── Phone shell ── */
-.phone-shell{width:340px;background:#1c1c1e;border-radius:46px;padding:12px;box-shadow:0 0 0 1.5px #3a3a3c,0 30px 80px rgba(0,0,0,.8),inset 0 0 0 1px rgba(255,255,255,.04);position:relative;isolation:isolate;}
+/* ── Phone shell — fluid on small screens ── */
+.phone-shell{
+  width:min(340px, calc(100vw - 24px));
+  background:#1c1c1e;border-radius:46px;padding:12px;
+  box-shadow:0 0 0 1.5px #3a3a3c,0 30px 80px rgba(0,0,0,.8),inset 0 0 0 1px rgba(255,255,255,.04);
+  position:relative;isolation:isolate;
+}
 .phone-notch{width:100px;height:26px;background:#1c1c1e;border-radius:0 0 18px 18px;position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:20;display:flex;align-items:center;justify-content:center;gap:6px;}
 .notch-speaker{width:44px;height:5px;background:#2a2a2c;border-radius:3px;}
 .notch-cam{width:10px;height:10px;background:#2a2a2c;border-radius:50%;}
-.screen{background:#e8edf5;border-radius:36px;overflow:hidden;height:680px;position:relative;display:flex;flex-direction:column;isolation:isolate;}
+.screen{background:#e8edf5;border-radius:36px;overflow:hidden;height:min(680px, calc(100dvh - 180px));position:relative;display:flex;flex-direction:column;isolation:isolate;}
 
 /* ── Status bar ── */
 .status-bar{
@@ -180,7 +194,7 @@ body{
 .fp-loc-badge{background:#f0f0f0;color:#555;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;}
 
 /* ═══ SIDE MENU ═══ */
-.side-menu{position:absolute;top:0;left:0;bottom:0;width:100%;background:#fff;z-index:30;transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto;}
+.side-menu{position:absolute;top:0;left:0;bottom:0;width:100%;background:#fff;z-index:30;transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
 .side-menu.open{transform:translateX(0);}
 .menu-header{background:#fff;padding:50px 20px 18px;display:flex;align-items:center;gap:14px;border-bottom:1px solid #f0f0f0;}
 .menu-avatar{width:48px;height:48px;background:var(--lyft-purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;}
@@ -254,7 +268,7 @@ body{
 .tut-next{background:#fff;color:#1a1a2e;border:none;border-radius:20px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
 
 /* ── Teach controls ── */
-.teach-controls{width:340px;margin-top:16px;display:flex;flex-direction:column;gap:8px;}
+.teach-controls{width:min(340px, calc(100vw - 24px));margin-top:16px;display:flex;flex-direction:column;gap:8px;}
 .teach-btn{background:rgba(255,255,255,.06);border:.5px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;color:#fff;font-size:13px;font-weight:500;transition:background .15s,border-color .15s;}
 .teach-btn:hover{background:rgba(91,61,232,.2);border-color:rgba(91,61,232,.5);}
 .teach-btn .tb-ico{font-size:18px;color:#a991ff;flex-shrink:0;}
