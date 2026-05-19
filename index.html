@@ -28,17 +28,55 @@ body{
   background:#1a1a2e;
   display:flex;flex-direction:column;align-items:center;
   min-height:100vh;min-height:100dvh;
-  padding:max(20px, env(safe-area-inset-top)) 12px max(40px, env(safe-area-inset-bottom));
+  padding:20px 12px 40px;
   font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;
   -webkit-text-size-adjust:100%;
   touch-action:manipulation;
   overscroll-behavior:none;
 }
+/* On real mobile: go full bleed, no padding, no phone chrome */
+@media (max-width: 480px) {
+  body {
+    padding:0;
+    background:#e8edf5;
+    overflow-x:hidden;
+  }
+  .page-title { display:none; }
+  .phone-shell {
+    width:100vw !important;
+    border-radius:0 !important;
+    padding:0 !important;
+    box-shadow:none !important;
+    background:transparent !important;
+  }
+  .phone-notch { display:none !important; }
+  .screen {
+    border-radius:0 !important;
+    height:calc(100dvh - var(--teach-height, 160px)) !important;
+    width:100vw !important;
+  }
+  .tut-overlay {
+    top:0 !important; left:0 !important;
+    right:0 !important; bottom:0 !important;
+    border-radius:0 !important;
+  }
+  .teach-controls {
+    width:100vw !important;
+    margin-top:0 !important;
+    padding:12px 12px max(12px, env(safe-area-inset-bottom)) !important;
+    background:#1a1a2e;
+    gap:6px !important;
+  }
+  .sec-hdr { padding: 8px 2px 2px !important; }
+  .teach-btn { border-radius:10px !important; padding:10px 14px !important; }
+  .filter-panel,
+  .side-menu { border-radius:0 !important; }
+}
 .page-title{color:#fff;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;opacity:.5;margin-bottom:16px;text-align:center;}
 
 /* ── Phone shell — fluid on small screens ── */
 .phone-shell{
-  width:min(340px, calc(100vw - 24px));
+  width:340px;
   background:#1c1c1e;border-radius:46px;padding:12px;
   box-shadow:0 0 0 1.5px #3a3a3c,0 30px 80px rgba(0,0,0,.8),inset 0 0 0 1px rgba(255,255,255,.04);
   position:relative;isolation:isolate;
@@ -46,7 +84,7 @@ body{
 .phone-notch{width:100px;height:26px;background:#1c1c1e;border-radius:0 0 18px 18px;position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:20;display:flex;align-items:center;justify-content:center;gap:6px;}
 .notch-speaker{width:44px;height:5px;background:#2a2a2c;border-radius:3px;}
 .notch-cam{width:10px;height:10px;background:#2a2a2c;border-radius:50%;}
-.screen{background:#e8edf5;border-radius:36px;overflow:hidden;height:min(680px, calc(100dvh - 180px));position:relative;display:flex;flex-direction:column;isolation:isolate;}
+.screen{background:#e8edf5;border-radius:36px;overflow:hidden;height:680px;position:relative;display:flex;flex-direction:column;isolation:isolate;}
 
 /* ── Status bar ── */
 .status-bar{
@@ -268,7 +306,7 @@ body{
 .tut-next{background:#fff;color:#1a1a2e;border:none;border-radius:20px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
 
 /* ── Teach controls ── */
-.teach-controls{width:min(340px, calc(100vw - 24px));margin-top:16px;display:flex;flex-direction:column;gap:8px;}
+.teach-controls{width:340px;margin-top:16px;display:flex;flex-direction:column;gap:8px;}
 .teach-btn{background:rgba(255,255,255,.06);border:.5px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;color:#fff;font-size:13px;font-weight:500;transition:background .15s,border-color .15s;}
 .teach-btn:hover{background:rgba(91,61,232,.2);border-color:rgba(91,61,232,.5);}
 .teach-btn .tb-ico{font-size:18px;color:#a991ff;flex-shrink:0;}
