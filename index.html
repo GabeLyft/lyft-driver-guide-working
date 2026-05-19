@@ -261,6 +261,68 @@ body{
 .mi-badge{margin-left:auto;background:var(--lyft-purple);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;}
 .mi-ev{margin-left:auto;background:rgba(25,201,100,.1);color:#16a85a;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;border:1px solid rgba(25,201,100,.25);}
 
+/* ═══ WELCOME SCREEN ═══ */
+.welcome-overlay{
+  display:none;position:absolute;
+  top:12px;left:12px;right:12px;bottom:12px;
+  border-radius:36px;
+  z-index:300;
+  background:rgba(10,10,20,0.93);
+  align-items:center;justify-content:center;
+  flex-direction:column;
+  padding:28px 24px;
+}
+.welcome-overlay.show{display:flex;}
+.welcome-logo{
+  width:56px;height:56px;
+  background:var(--lyft-purple);
+  border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:20px;
+  box-shadow:0 8px 24px rgba(91,61,232,.5);
+}
+.welcome-title{
+  color:#fff;font-size:22px;font-weight:800;
+  text-align:center;margin-bottom:8px;line-height:1.2;
+}
+.welcome-subtitle{
+  color:#a991ff;font-size:13px;font-weight:600;
+  text-align:center;margin-bottom:20px;
+  letter-spacing:.3px;
+}
+.welcome-divider{width:40px;height:2px;background:rgba(255,255,255,.1);border-radius:2px;margin-bottom:20px;}
+.welcome-items{width:100%;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;}
+.welcome-item{
+  display:flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:12px 14px;
+}
+.welcome-item-num{
+  width:28px;height:28px;
+  background:var(--lyft-purple);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:12px;font-weight:800;
+  flex-shrink:0;
+}
+.welcome-item-text{flex:1;}
+.welcome-item-title{color:#fff;font-size:13px;font-weight:700;margin-bottom:2px;}
+.welcome-item-sub{color:#888;font-size:11px;line-height:1.4;}
+.welcome-start-btn{
+  width:100%;
+  background:var(--lyft-purple);
+  border:none;border-radius:30px;
+  padding:16px;
+  color:#fff;font-size:15px;font-weight:700;
+  cursor:pointer;font-family:inherit;
+  box-shadow:0 6px 20px rgba(91,61,232,.4);
+  transition:background .15s,transform .1s;
+}
+.welcome-start-btn:active{background:var(--lyft-purple-dark);transform:scale(.98);}
+.welcome-note{color:#555;font-size:11px;text-align:center;margin-top:12px;}
+
 /* ═══ TUTORIAL OVERLAY ═══ */
 /* Overlay is transparent — the cutout's huge box-shadow provides the dim */
 .tut-overlay{display:none;position:absolute;top:12px;left:12px;right:12px;bottom:12px;border-radius:36px;z-index:200;background:transparent;}
@@ -460,6 +522,47 @@ body{
           <div class="filter-dot" id="filterDot"></div>
         </div>
       </div>
+    </div>
+
+    <!-- ═══ WELCOME SCREEN ═══ -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+      <div class="welcome-logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <circle cx="12" cy="12" r="2.5" fill="#fff"/>
+          <line x1="12" y1="3" x2="12" y2="9.5"/>
+          <line x1="3.8" y1="16.5" x2="9.2" y2="13.2"/>
+          <line x1="20.2" y1="16.5" x2="14.8" y2="13.2"/>
+        </svg>
+      </div>
+      <div class="welcome-title">Welcome to the Lyft Driver App Guide</div>
+      <div class="welcome-subtitle">A quick tour of 3 essential features</div>
+      <div class="welcome-divider"></div>
+      <div class="welcome-items">
+        <div class="welcome-item">
+          <div class="welcome-item-num">1</div>
+          <div class="welcome-item-text">
+            <div class="welcome-item-title">Ride Filters</div>
+            <div class="welcome-item-sub">Control where your rides take you and which ride types you accept</div>
+          </div>
+        </div>
+        <div class="welcome-item">
+          <div class="welcome-item-num">2</div>
+          <div class="welcome-item-text">
+            <div class="welcome-item-title">Personal Miles</div>
+            <div class="welcome-item-sub">Track your weekly mileage inside Vehicle and Devices</div>
+          </div>
+        </div>
+        <div class="welcome-item">
+          <div class="welcome-item-num">3</div>
+          <div class="welcome-item-text">
+            <div class="welcome-item-title">EV Hub</div>
+            <div class="welcome-item-sub">Find charging stations and exclusive discounts at EVGO, Electrify America, and EVCS</div>
+          </div>
+        </div>
+      </div>
+      <button class="welcome-start-btn" onclick="dismissWelcome()">Start Tour →</button>
+      <div class="welcome-note">Takes about 2 minutes</div>
     </div>
 
     <!-- ═══ FILTER PANEL ═══ -->
@@ -1053,20 +1156,22 @@ function renderStep() {
   }, overlayDelay);
 }
 
-// ── Auto-start on load ──
-// Use both DOMContentLoaded and window.load to ensure it fires reliably on Vercel/mobile
-function autoStart() {
-  if (curTour) return; // already running (shouldn't happen but guard anyway)
-  startTour('filters');
+// ── Welcome + Auto-start ──
+function dismissWelcome() {
+  document.getElementById('welcomeOverlay').classList.remove('show');
+  setTimeout(() => startTour('filters'), 300);
+}
+
+function showWelcome() {
+  document.getElementById('welcomeOverlay').classList.add('show');
 }
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(autoStart, 600);
+    setTimeout(showWelcome, 400);
   });
 } else {
-  // DOM already ready (script runs after parse)
-  setTimeout(autoStart, 600);
+  setTimeout(showWelcome, 400);
 }
 </script>
 </body>
