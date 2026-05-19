@@ -935,8 +935,24 @@ const tours = {
 
 function startTour(name) { curTour = name; tourStep = 0; renderStep(); }
 function nextStep() {
-  if (tourStep < tours[curTour].length - 1) { tourStep++; renderStep(); }
-  else endTour();
+  const isLast = tourStep === tours[curTour].length - 1;
+  const nextMap = { filters: 'miles', miles: 'ev' };
+  if (isLast && nextMap[curTour]) {
+    const next = nextMap[curTour];
+    curTour = null; tourStep = 0;
+    document.getElementById('tutCutout').style.display = 'none';
+    closeMenu(); closeFilters();
+    ['milesBadge','evBadge'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    startTour(next);
+  } else if (isLast) {
+    endTour();
+  } else {
+    tourStep++;
+    renderStep();
+  }
 }
 function endTour() {
   curTour = null; tourStep = 0;
@@ -1011,8 +1027,18 @@ function renderStep() {
   // Next/Done button
   const isLast = tourStep === tours[curTour].length - 1;
   const nb = document.getElementById('tutNext');
-  nb.textContent = isLast ? '✓ Done' : 'Next →';
-  nb.className   = isLast ? 'tut-next done' : 'tut-next';
+  const nextTourLabels = { filters: 'Personal Miles', miles: 'EV Hub' };
+  const nextTourIcons  = { filters: '📍', miles: '⚡' };
+  if (isLast && nextTourLabels[curTour]) {
+    nb.textContent = 'Next: ' + nextTourIcons[curTour] + ' ' + nextTourLabels[curTour] + ' →';
+    nb.className   = 'tut-next';
+  } else if (isLast) {
+    nb.textContent = '✓ Done';
+    nb.className   = 'tut-next done';
+  } else {
+    nb.textContent = 'Next →';
+    nb.className   = 'tut-next';
+  }
 
   // Card position
   // Card position set dynamically in highlight block; set default here for no-highlight steps
@@ -1058,6 +1084,22 @@ function renderStep() {
       backdrop.classList.add('visible');
     }
   }, overlayDelay);
+}
+
+// ── Auto-start on load ──
+// Use both DOMContentLoaded and window.load to ensure it fires reliably on Vercel/mobile
+function autoStart() {
+  if (curTour) return; // already running (shouldn't happen but guard anyway)
+  startTour('filters');
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(autoStart, 600);
+  });
+} else {
+  // DOM already ready (script runs after parse)
+  setTimeout(autoStart, 600);
 }
 </script>
 </body>
